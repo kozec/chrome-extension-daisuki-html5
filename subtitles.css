@@ -1,0 +1,73 @@
+.flowplayer .fp-subtitle{
+	font-family:Arial,Tahoma,'myriad pro',Helvetica,sans-serif;
+	position:absolute;
+	bottom:20px;
+	left:-99999em;
+	z-index:10;
+	text-align:center;
+	width:100%;
+	opacity:0;
+	-webkit-transition:opacity .3s;
+	-moz-transition:opacity .3s;
+	transition:opacity .3s;
+}
+
+.fp-subtitle p {
+	display:inline;
+	font-weight:bold;
+	color: white;
+	padding:.1em .4em;
+	font-size: 2.5em;
+	line-height:1.0;
+
+	text-shadow: 1px 1px 0 #004152,
+		-1px 1px 0 #004152,
+		1px -1px 0 #004152,
+		-1px -1px 0 #004152,
+		0px 1px 0 #004152,
+		0px -1px 0 #004152,
+		-1px 0px 0 #004152,
+		1px 0px 0 #004152,
+		2px 2px 0 #004152,
+		-2px 2px 0 #004152,
+		2px -2px 0 #004152,
+		-2px -2px 0 #004152,
+		0px 2px 0 #004152,
+		0px -2px 0 #004152,
+		-2px 0px 0 #004152,
+		2px 0px 0 #004152,
+		1px 2px 0 #004152,
+		-1px 2px 0 #004152,
+		1px -2px 0 #004152,
+		-1px -2px 0 #004152,
+		2px 1px 0 #004152,
+		-2px 1px 0 #004152,
+		2px -1px 0 #004152,
+		-2px -1px 0 #004152;
+}
+
+.is-fullscreen .fp-subtitle {
+	bottom:40px;
+}
+
+@media screen and (min-width: 1400px) {
+	.is-fullscreen .fp-subtitle {
+		bottom:40px;
+	}
+	
+	.is-fullscreen .fp-subtitle p {
+		font-size: 4.5em;
+	}
+}
+
+.flowplayer .fp-subtitle p:after{content:'';clear:both}
+.flowplayer .fp-subtitle p b{font-weight:bold}
+.flowplayer .fp-subtitle p i{font-style:italic}
+.flowplayer .fp-subtitle p u{text-decoration:underline}
+.flowplayer .fp-subtitle.fp-active{left:0;opacity:1;}
+
+
+.fp-dropup li {
+	font-size: 12px !important;
+	font-family:Arial,Tahoma,'myriad pro',Helvetica,sans-serif;
+}

@@ -11,4 +11,6 @@ streaming site.
 - Additionaly, allows inserting 3rd party subtitle files by adding `#subs=some/random/url.srt` to address.
 
 
+##### What this doesn't
 Please note that this excenstion **doesn't** allow you to rip streamed audio, video or subtitle streams.
+

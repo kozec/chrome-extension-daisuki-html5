@@ -1,0 +1,33 @@
+{
+	"manifest_version": 2,
+
+	"name": "Daisuki.net HTML5 player",
+	"description": "Allows playing streams on Daisuki.net",
+	"version": "1.0",
+
+	"content_scripts": [{
+		"matches": [ "http://www.daisuki.net/*" ],
+		"run_at": "document_end",
+		"js": ["page.js"]
+	}],
+	
+	"background": {
+		"scripts": ["background.js"]
+	},
+	
+	"web_accessible_resources": [
+		"skin/*",
+		"flowplayer.min.js",
+		"flowplayer.hlsjs.min.js",
+		"subtitles.css",
+		"injected.js"
+	],
+	
+	"permissions": [
+		"storage",
+		"webRequest",
+		"webRequestBlocking",
+		"<all_urls>"
+	]
+
+}
