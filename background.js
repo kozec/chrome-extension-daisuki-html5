@@ -1,8 +1,20 @@
+/**
+ * Runs on background and adds fake 'Access-Control-Allow-Origin' header to
+ * selected responses. This allows HTML5 player to load subtitles from another
+ * domain.
+ * 
+ * Affected responses are:
+ * - From b-ch.com domain, if url ends with ".xml"
+ * - Any reponse with url ending in ".vtt" (suppor for 3rd party vtt subtitle)
+ * - Any reponse with url ending in ".srt" (vtt and srt formats are almost same)
+ */
+
 var responseListener = function(details){
+	/** Handles what's described on top */
 	var url = details.url;
 	
 	if (
-		(url.endsWith(".xml") && (url.indexOf("b-ch.com") !== -1) ) /* original subtitles */
+		(url.endsWith(".xml") && (url.indexOf("b-ch.com/") !== -1) ) /* original subtitles */
 		||
 		(url.endsWith(".srt") || url.endsWith(".vtt")) /* supported 3rd party subtitles */
 	) {
@@ -25,8 +37,9 @@ var responseListener = function(details){
 	return {responseHeaders: details.responseHeaders};
 };
 
-/*On install*/
+
 chrome.runtime.onInstalled.addListener(function(){
+	/** Installs HeadersReceived listener */
 	chrome.webRequest.onHeadersReceived.removeListener(responseListener);
 	chrome.webRequest.onHeadersReceived.addListener(responseListener, { urls: ['http://*/*', 'https://*/*'] }, ["blocking", "responseHeaders"]);
 });

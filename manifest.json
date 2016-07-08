@@ -2,9 +2,15 @@
 	"manifest_version": 2,
 
 	"name": "Daisuki.net HTML5 player",
-	"description": "Allows playing streams on Daisuki.net",
+	"description": "Allows playing streams on Daisuki.net without flash",
 	"version": "1.0",
-
+	
+	"icons": {
+		"16": "icon16.png",
+		"48": "icon48.png",
+		"128": "icon128.png"
+	},
+	
 	"content_scripts": [{
 		"matches": [ "http://www.daisuki.net/*" ],
 		"run_at": "document_end",

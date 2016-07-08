@@ -3,6 +3,8 @@
 Chrome extension that enables HTML5 video playback on [Daisuki.net](daisuki.net)
 streaming site.
 
+- [In Chrome web store](https://chrome.google.com/webstore/detail/daisukinet-html5-player/dahbmanfpahknnmadamjpipnihhkincm)
+
 ---
 
 ##### What this does
