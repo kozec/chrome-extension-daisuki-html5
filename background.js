@@ -13,11 +13,7 @@ var responseListener = function(details){
 	/** Handles what's described on top */
 	var url = details.url;
 	
-	if (
-		(url.endsWith(".xml") && (url.indexOf("b-ch.com/") !== -1) ) /* original subtitles */
-		||
-		(url.endsWith(".srt") || url.endsWith(".vtt")) /* supported 3rd party subtitles */
-	) {
+	if (url.endsWith(".xml") && (url.indexOf("b-ch.com/") !== -1)) { /* original subtitles */
 		var flag = false,
 		rule = {
 				"name": "Access-Control-Allow-Origin",

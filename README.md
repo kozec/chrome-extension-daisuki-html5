@@ -9,8 +9,9 @@ streaming site.
 
 ##### What this does
 - Replaces not working Flash player with [Flowplayer](https://flowplayer.org/) set to HTML5 engine.
-- **Allows cross-origin requests** to b-ch.com, domain, where subtitles are stored, and any .srt or .vtt file **for any page**.
-- Additionaly, allows inserting 3rd party subtitle files by adding `#subs=some/random/url.srt` to address.
+- Allows using custom subtitles by drag-n-dropping SRT file into player window.
+- **Allows cross-origin requests** to b-ch.com, domain, where original subtitles are stored.
+- Additionaly, allows inserting 3rd party subtitle files by adding `#subs=some/random/url.srt` to address, as long, as 3rd party host allows cross-origin requests.
 
 
 ##### What this doesn't

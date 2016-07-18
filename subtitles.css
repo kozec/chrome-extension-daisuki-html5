@@ -71,3 +71,8 @@
 	font-size: 12px !important;
 	font-family:Arial,Tahoma,'myriad pro',Helvetica,sans-serif;
 }
+
+
+.drop-area-hover {
+	border: 2px red solid;
+}

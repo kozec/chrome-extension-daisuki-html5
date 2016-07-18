@@ -22,6 +22,42 @@ function createPlayer(url, type, subtitles) {
 		subtitleParser: xmlSubtitleParser,
 		embed : false,
 	});
+	
+	// Create drag & drop target
+	m.ondragover = function() {
+		if (this.className.indexOf('drop-area-hover') == -1) {
+			this.originalClassName = '' + this.className;
+			this.className += ' drop-area-hover';
+		}
+		return false;
+	};
+	
+	m.ondragend = function() {
+		console.log("1>" + this.originalClassName);
+		this.className = this.originalClassName;
+		return false;
+	};
+	
+	m.ondrop = function(e) {
+		console.log("2>" + this.originalClassName);
+		this.className = this.originalClassName;
+		e.preventDefault();
+		
+		var file = e.dataTransfer.files[0];
+		if ((file) && (file.name.endsWith(".srt") || file.name.endsWith(".vtt")))  {
+			reader = new FileReader();
+			reader.onload = function(event) {
+				localStorage.setItem('custom-sub', event.target.result);
+				if (location.href.indexOf("#") == -1)
+					localStorage.setItem('custom-sub-url', location.href);
+				else
+					localStorage.setItem('custom-sub-url', location.href.substring(0, location.href.indexOf("#")));
+				location.reload();
+			};
+			reader.readAsText(file);
+			return true;
+		}
+	};
 }
 
 function seconds(timecode) {
@@ -63,11 +99,15 @@ function srtSubtitleParser(txt) {
 		}
 	}
 	return entries;
-};
+}
 
 function xmlSubtitleParser(txt) {
 	/** Parses TTML subtitle format used by Daisuki flash player */
 	var xml;
+	if (txt === 'use-custom') {
+		// Special "data" url
+		return srtSubtitleParser(localStorage['custom-sub']);
+	}
 	try {
 		xml = $($.parseXML(txt));
 	} catch (e) {
@@ -92,6 +132,12 @@ function xmlSubtitleParser(txt) {
 	return subs;
 }
 
+
+function removeDefaults(subs) {
+	// For every subtitle in array, clears 'default' flag.
+	for(var i = 0; i < subs.length; i++)
+		subs[i]["default"] = false;
+}
 
 $(document).ready(function() {
 	/** That part that actually does interesting stuff */
@@ -158,8 +204,7 @@ $(document).ready(function() {
 			if (hashparams.sub) {
 				console.log(hashparams);
 				// Only user-provided subtitle track should be default
-				for(var i = 0; i < subs.length; i++)
-					subs[i]["default"] = false;
+				removeDefaults(subs);
 				var lang = hashparams.lang || "unk";
 				var label = hashparams.label || "Unknown";
 				subs.push({ kind:"subtitles", "default":true,
@@ -167,6 +212,16 @@ $(document).ready(function() {
 					src: hashparams.sub }
 				);
 			}
+			
+			// Add drag&dropped subtitles, if set
+			if (localStorage['custom-sub-url'] && location.href.startsWith(localStorage['custom-sub-url'])) {
+				removeDefaults(subs);
+				subs.push({ kind:"subtitles", "default":true,
+					srclang: "unk", label: "Custom",
+					src: "data:text/plain,use-custom"
+				});
+			}
+			
 			
 			console.log(url);
 			console.log(subs);
