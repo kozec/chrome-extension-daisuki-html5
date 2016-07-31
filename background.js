@@ -5,8 +5,6 @@
  * 
  * Affected responses are:
  * - From b-ch.com domain, if url ends with ".xml"
- * - Any reponse with url ending in ".vtt" (suppor for 3rd party vtt subtitle)
- * - Any reponse with url ending in ".srt" (vtt and srt formats are almost same)
  */
 
 var responseListener = function(details){
