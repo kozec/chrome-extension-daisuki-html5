@@ -169,7 +169,7 @@ $(document).ready(function() {
 	// window.bgnEncrypt and window.bgnGetKey are provided by original page code
 	params = {
 		"s": flashvars["s"],
-		"c": "SK",
+		"c": flashvars["ss3_prm"],
 		"e": location.href,
 		"d": window.bgnEncrypt(api_params),
 		"a": window.bgnGetKey(),
