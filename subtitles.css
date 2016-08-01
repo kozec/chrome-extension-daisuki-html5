@@ -76,3 +76,8 @@
 .drop-area-hover {
 	border: 2px red solid;
 }
+
+
+.flowplayer .fp-dropdown li {
+	padding: 5px !important;
+}

@@ -101,22 +101,43 @@ function srtSubtitleParser(txt) {
 	return entries;
 }
 
+var current_xml = null;	// Stores xml passed to xmlSubtitleParser for cases when
+						// another language from same xml is passed
+
 function xmlSubtitleParser(txt) {
 	/** Parses TTML subtitle format used by Daisuki flash player */
 	var xml;
+	console.log("xmlSubtitleParser " + txt.substring(0, 20));
+	console.info(flowplayer().subtitles);
 	if (txt === 'use-custom') {
 		// Special "data" url
 		return srtSubtitleParser(localStorage['custom-sub']);
 	}
-	try {
-		xml = $($.parseXML(txt));
-	} catch (e) {
-		// Not XML - parse as srt/vtt
-		return srtSubtitleParser(txt);
+	var lang = "English";
+	if (txt.startsWith("use:")) {
+		xml = current_xml;
+		lang = txt.substr(4);
+	} else {
+		try {
+			xml = $($.parseXML(txt));
+		} catch (e) {
+			// Not XML - parse as srt/vtt
+			return srtSubtitleParser(txt);
+		}
+		current_xml = xml;
 	}
 	var subs = [];
 	var i = 1;
-	xml.find("p").each(function() {
+	
+	var div = xml; // all P's by default
+	xml.find("div").each(function() {
+		if (this.attributes['xml:lang'].value == lang)
+			div = $(this);
+	});
+	
+	console.log("Loading lang " + lang );
+	console.log(div);
+	div.find("p").each(function() {
 		text = $(this).text().replace(/^\s+|\s+$/g, '');
 		
 		subs.push({
@@ -126,8 +147,6 @@ function xmlSubtitleParser(txt) {
 			text: "<p>" + text.replace("\n", "<br/>") + "</p>"
 		});
 	});
-	
-	console.log(subs[0]);
 	
 	return subs;
 }
@@ -194,10 +213,30 @@ $(document).ready(function() {
 			// Generate list of subtitle tracks
 			var subs = [];
 			if (init_data.caption_url) {
-				// Assuming here, it may get updated if daisuki even changes
-				subs = [ { kind:"subtitles", "default":true,
-					srclang: "en", label: "English",
-					src: init_data.caption_url } ];
+				if (init_data.caption_lang) {
+					subs = [ ];
+					for (var i = 0; i < init_data.caption_lang.length; i++) {
+						var code = Object.keys(init_data.caption_lang[i])[0];
+						var label = init_data.caption_lang[i][code];
+						var def = (label == "English");
+						var src = def ? init_data.caption_url : ("data:text/plain,use:" + label);
+						subs.push({
+							kind: "subtitles",
+							"default": def,
+							srclang: label,
+							label: label,
+							src: src,
+						});
+						def = false;
+					}
+				} else {
+					// Only one language is available, assume english
+					subs = [{ kind: "subtitles", "default": true,
+						srclang: "en", label: "English",
+						id: null,
+						src: init_data.caption_url
+					}];
+				}
 			}
 			
 			// Add user-provided subtitle track, if any
