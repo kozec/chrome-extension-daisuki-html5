@@ -3,7 +3,7 @@
 
 	"name": "Daisuki.net HTML5 player",
 	"description": "Allows playing streams on Daisuki.net without flash",
-	"version": "1.1",
+	"version": "1.4",
 	
 	"icons": {
 		"16": "icon16.png",
@@ -16,10 +16,6 @@
 		"run_at": "document_end",
 		"js": ["page.js"]
 	}],
-	
-	"background": {
-		"scripts": ["background.js"]
-	},
 	
 	"web_accessible_resources": [
 		"skin/*",
