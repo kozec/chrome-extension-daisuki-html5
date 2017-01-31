@@ -196,78 +196,66 @@ $(document).ready(function() {
 	
 	
 	// Request video data
-	$.get("http://www.daisuki.net" + flashvars['init'], params, function(data) {
+	$.get("http://www.daisuki.net" + flashvars.init, params, function(data) {
 		// window.bgnDecrypt is provided by original page as well.
 		init_data = window.bgnDecrypt(data.rtn);
 		console.log(init_data);
 		
-		// Get 'playlist' with alternative streams
-		$.get(init_data.play_url, function(data) {
-			window.playlist_data = data;
-			var p = data.split("\n");
-			
-			// Chose last (best available) stream
-			var url = p.pop();
-			while (url === "") url = p.pop();
-			
-			// Generate list of subtitle tracks
-			var subs = [];
-			if (init_data.caption_url) {
-				if (init_data.caption_lang) {
-					subs = [ ];
-					for (var i = 0; i < init_data.caption_lang.length; i++) {
-						var code = Object.keys(init_data.caption_lang[i])[0];
-						var label = init_data.caption_lang[i][code];
-						var def = (label == "English");
-						var src = def ? init_data.caption_url : ("data:text/plain,use:" + label);
-						subs.push({
-							kind: "subtitles",
-							"default": def,
-							srclang: label,
-							label: label,
-							src: src,
-						});
-						def = false;
-					}
-				} else {
-					// Only one language is available, assume english
-					subs = [{ kind: "subtitles", "default": true,
-						srclang: "en", label: "English",
-						id: null,
-						src: init_data.caption_url
-					}];
+		// Generate list of subtitle tracks
+		var subs = [];
+		if (init_data.caption_url) {
+			if (init_data.caption_lang) {
+				subs = [ ];
+				for (var i = 0; i < init_data.caption_lang.length; i++) {
+					var code = Object.keys(init_data.caption_lang[i])[0];
+					var label = init_data.caption_lang[i][code];
+					var def = (label == "English");
+					var src = def ? init_data.caption_url : ("data:text/plain,use:" + label);
+					subs.push({
+						kind: "subtitles",
+						"default": def,
+						srclang: label,
+						label: label,
+						src: src,
+					});
+					def = false;
 				}
+			} else {
+				// Only one language is available, assume english
+				subs = [{ kind: "subtitles", "default": true,
+					srclang: "en", label: "English",
+					id: null,
+					src: init_data.caption_url
+				}];
 			}
+		}
+		
+		// Add user-provided subtitle track, if any
+		if (hashparams.sub) {
+			console.log(hashparams);
+			// Only user-provided subtitle track should be default
+			removeDefaults(subs);
+			var lang = hashparams.lang || "unk";
+			var label = hashparams.label || "Unknown";
+			subs.push({ kind:"subtitles", "default":true,
+				srclang: lang, label: label,
+				src: hashparams.sub }
+			);
+		}
+		
+		// Add drag&dropped subtitles, if set
+		if (localStorage['custom-sub-url'] && location.href.startsWith(localStorage['custom-sub-url'])) {
+			removeDefaults(subs);
+			subs.push({ kind:"subtitles", "default":true,
+				srclang: "unk", label: "Custom",
+				src: "data:text/plain,use-custom"
+			});
+		}
+		
+		console.log(init_data.play_url);
+		console.log(subs);
 			
-			// Add user-provided subtitle track, if any
-			if (hashparams.sub) {
-				console.log(hashparams);
-				// Only user-provided subtitle track should be default
-				removeDefaults(subs);
-				var lang = hashparams.lang || "unk";
-				var label = hashparams.label || "Unknown";
-				subs.push({ kind:"subtitles", "default":true,
-					srclang: lang, label: label,
-					src: hashparams.sub }
-				);
-			}
-			
-			// Add drag&dropped subtitles, if set
-			if (localStorage['custom-sub-url'] && location.href.startsWith(localStorage['custom-sub-url'])) {
-				removeDefaults(subs);
-				subs.push({ kind:"subtitles", "default":true,
-					srclang: "unk", label: "Custom",
-					src: "data:text/plain,use-custom"
-				});
-			}
-			
-			
-			console.log(url);
-			console.log(subs);
-			
-			// Feed player instance with parsed values
-			createPlayer(url, "application/x-mpegURL", subs);
-			
-		});
+		// Feed player instance with parsed values
+		createPlayer(init_data.play_url, "application/x-mpegURL", subs);
 	});
 });
