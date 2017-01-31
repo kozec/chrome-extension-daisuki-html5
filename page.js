@@ -7,7 +7,7 @@
 
 var s = document.createElement('link');
 s.rel = "stylesheet";
-s.href = chrome.extension.getURL('skin/minimalist.css');
+s.href = "//releases.flowplayer.org/7.0.1/skin/skin.css";
 (document.head || document.documentElement).appendChild(s);
 
 s = document.createElement('link');

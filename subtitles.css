@@ -1,24 +1,15 @@
-.flowplayer .fp-subtitle{
+.flowplayer .fp-captions{
 	font-family:Arial,Tahoma,'myriad pro',Helvetica,sans-serif;
-	position:absolute;
-	bottom:20px;
-	left:-99999em;
-	z-index:10;
-	text-align:center;
-	width:100%;
-	opacity:0;
-	-webkit-transition:opacity .3s;
-	-moz-transition:opacity .3s;
-	transition:opacity .3s;
 }
 
-.fp-subtitle p {
+.fp-captions p {
 	display:inline;
 	font-weight:bold;
 	color: white;
-	padding:.1em .4em;
-	font-size: 2.5em;
+	padding: .1em .4em;
+	font-size: 1.5em !important;
 	line-height:1.0;
+	background: none !important;
 
 	text-shadow: 1px 1px 0 #004152,
 		-1px 1px 0 #004152,
@@ -46,25 +37,25 @@
 		-2px -1px 0 #004152;
 }
 
-.is-fullscreen .fp-subtitle {
+.is-fullscreen .fp-captions {
 	bottom:40px;
 }
 
 @media screen and (min-width: 1400px) {
-	.is-fullscreen .fp-subtitle {
+	.is-fullscreen .fp-captions {
 		bottom:40px;
 	}
 	
-	.is-fullscreen .fp-subtitle p {
-		font-size: 4.5em;
+	.is-fullscreen .fp-captions p {
+		font-size: 4.5em !important;
 	}
 }
 
-.flowplayer .fp-subtitle p:after{content:'';clear:both}
-.flowplayer .fp-subtitle p b{font-weight:bold}
-.flowplayer .fp-subtitle p i{font-style:italic}
-.flowplayer .fp-subtitle p u{text-decoration:underline}
-.flowplayer .fp-subtitle.fp-active{left:0;opacity:1;}
+.flowplayer .fp-captions p:after{content:'';clear:both}
+.flowplayer .fp-captions p b{font-weight:bold}
+.flowplayer .fp-captions p i{font-style:italic}
+.flowplayer .fp-captions p u{text-decoration:underline}
+.flowplayer .fp-captions.fp-active{left:0;opacity:1;}
 
 
 .fp-dropup li {
