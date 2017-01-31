@@ -29,7 +29,8 @@
 		"storage",
 		"webRequest",
 		"webRequestBlocking",
-		"<all_urls>"
+		"http://www.daisuki.net/*",
+		"https://www.daisuki.net/*"
 	]
 
 }
