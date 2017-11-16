@@ -1,9 +1,8 @@
 {
 	"manifest_version": 2,
-
 	"name": "Daisuki.net HTML5 player",
 	"description": "Allows playing streams on Daisuki.net without flash",
-	"version": "1.4",
+	"version": "1.5",
 	
 	"icons": {
 		"16": "icon16.png",
@@ -12,7 +11,7 @@
 	},
 	
 	"content_scripts": [{
-		"matches": [ "http://www.daisuki.net/*" ],
+		"matches": [ "http://motto.daisuki.net/*" ],
 		"run_at": "document_end",
 		"js": ["page.js"]
 	}],
@@ -29,8 +28,9 @@
 		"storage",
 		"webRequest",
 		"webRequestBlocking",
-		"http://www.daisuki.net/*",
-		"https://www.daisuki.net/*"
+		"http://motto.daisuki.net/*",
+		"https://motto.daisuki.net/*",
+		"http://releases.flowplayer.org/*",
+		"https://releases.flowplayer.org/*"
 	]
-
 }

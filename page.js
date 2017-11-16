@@ -19,11 +19,11 @@ s.href = chrome.extension.getURL('subtitles.css');
 // JS
 
 s = document.createElement('script');
-s.src = chrome.extension.getURL('flowplayer.min.js');
+s.src = "//releases.flowplayer.org/7.0.1/flowplayer.min.js";
 (document.head || document.documentElement).appendChild(s);
 
 s = document.createElement('script');
-s.src = chrome.extension.getURL('flowplayer.hlsjs.min.js');
+s.src = "//releases.flowplayer.org/hlsjs/1.1.1/flowplayer.hlsjs.min.js";
 (document.head || document.documentElement).appendChild(s);
 
 s = document.createElement('script');

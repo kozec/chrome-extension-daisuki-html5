@@ -8,11 +8,26 @@ function createPlayer(url, type, subtitles) {
 	 * Creates flowplayer instance.
 	 * Called after required video data is parsed.
 	 */
-	var m = document.getElementById("movieArea");
-	while (m.firstChild)
-		m.removeChild(m.firstChild);
+	var dragonball_wrapper_div = document.getElementById("dragonball_wrapper");
 	
-	flowplayer("#movieArea", {
+	// First try to remove any existing html5_movie div
+	try {
+		dragonball_wrapper_div.removeChild(document.getElementById("html5_movie"));
+	} catch (err) {
+		// ignore
+	}
+
+	var flash_movie_div = document.getElementById("movie");
+	var html5_movie_div = document.createElement("div");
+	html5_movie_div.id = "html5_movie";
+
+	// Hide the original flash movie
+	flash_movie_div.hidden = true;
+
+	// Now put the new html5 movie in its place
+	dragonball_wrapper_div.insertBefore(html5_movie_div, flash_movie_div);
+
+	flowplayer("#html5_movie", {
 		clip: {
 			sources: [
 				{ type: type, src: url },
@@ -23,6 +38,8 @@ function createPlayer(url, type, subtitles) {
 		embed : false,
 	});
 	
+	var m = html5_movie_div;
+
 	// Create drag & drop target
 	m.ondragover = function() {
 		if (this.className.indexOf('drop-area-hover') == -1) {
@@ -158,12 +175,20 @@ function removeDefaults(subs) {
 		subs[i]["default"] = false;
 }
 
-$(document).ready(function() {
+// Get the scripts manually since including them in the page doesn't seem to load fully all the
+// time
+var daisukiScriptsLoaded = jQuery.Deferred();
+$.getScript("/common2/js/agcrypto.min.js", function() {
+	$.getScript("/common2/js/bgnwrapper.js", function() {
+		daisukiScriptsLoaded.resolve("loaded");
+	});
+});
+
+$("iframe#latest_movie").on("load", function() { $.when(daisukiScriptsLoaded.promise()).then(function() {
 	/** That part that actually does interesting stuff */
 	
 	// Grab video data
-	var m = document.getElementById("movie");
-	var s = m.getElementsByTagName("script")[0].text;
+	var s = $("iframe#latest_movie").contents().find("script")[8].text;
 	eval(s.substring(0, s.indexOf("swfobject")));
 	
 	// Grab url hash data - can be used to add additiona subtitle track
@@ -190,15 +215,15 @@ $(document).ready(function() {
 		"s": flashvars["s"],
 		"c": flashvars["ss3_prm"],
 		"e": location.href,
-		"d": window.bgnEncrypt(api_params),
-		"a": window.bgnGetKey(),
+		"d": bgnEncrypt(api_params),
+		"a": bgnGetKey(),
 	};
 	
 	
 	// Request video data
-	$.get("http://www.daisuki.net" + flashvars.init, params, function(data) {
+	$.get("http://motto.daisuki.net" + flashvars.init, params, function(data) {
 		// window.bgnDecrypt is provided by original page as well.
-		init_data = window.bgnDecrypt(data.rtn);
+		init_data = bgnDecrypt(JSON.parse(data).rtn);
 		console.log(init_data);
 		
 		// Generate list of subtitle tracks
@@ -258,4 +283,4 @@ $(document).ready(function() {
 		// Feed player instance with parsed values
 		createPlayer(init_data.play_url, "application/x-mpegURL", subs);
 	});
-});
+})});
